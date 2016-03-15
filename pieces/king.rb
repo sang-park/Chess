@@ -8,7 +8,11 @@ class King < Piece
   end
 
   def to_s
-    " ♔ "
+    if color == :white
+      " ♔ "
+    else
+      " ♚ "
+    end
   end
 
 end
