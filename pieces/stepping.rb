@@ -26,7 +26,7 @@ module Stepping
     cur_x, cur_y = pos
     direction.each do |(dx, dy)|
       new_pos = [cur_x + dx, cur_y + dy]
-      possible_moves << new_pos if self.valid_moves?(new_pos)
+      possible_moves << new_pos if self.on_board?(new_pos)
     end
     possible_moves
   end

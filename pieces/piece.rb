@@ -1,12 +1,16 @@
 class Piece
-  attr_reader :board, :pos, :color
+  attr_reader :board, :color, :pos
+
+
   def initialize(board, pos, color)
     @board = board
     @pos = pos
     @color = color
   end
 
-  def valid_moves
+  def pos=(end_pos)
+    @pos = end_pos
+    board[end_pos] = self
   end
 
   def on_board?(pos)

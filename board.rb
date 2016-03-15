@@ -1,6 +1,5 @@
 
 class Board
-
   include Enumerable
 
   def initialize()
@@ -28,6 +27,7 @@ class Board
   end
 
   def setup
+
     [[0,:white],[7,:black]].each do |i,color|
       self[[i, 0]] = Rook.new(self, [i, 0],color)
       self[[i, 7]] = Rook.new(self, [i, 7],color)
@@ -45,18 +45,18 @@ class Board
       end
     end
 
-    self[[5,2]] = Pawn.new(self, [5,2],:white)
-
   end
 
   def move(start_pos,end_pos)
-    raise "no piece at start position" if self[start_pos].empty?
-    raise "cannot move to that position" unless self[end_pos].empty?
-  rescue => e
-    puts "#{e.message}. Try again"
-    #retry
-    #deepdupes
+    valid_moves = self[start_pos].move_dirs
+    unless valid_moves.include?(end_pos)
+      raise ChessError.new("cannot move to that position")
+    end
+    piece = self[start_pos]
+    piece.pos = end_pos
+    self[start_pos] = EmptyPiece.new(self,start_pos)
   end
+
 
   def in_bounds?(pos)
     pos.all? {|el| el.between?(0,7)}

@@ -28,13 +28,15 @@ class Pawn < Piece
       end
     end
     moves(direction) + attack_moves(attack_dirs)
+    #debugger
+  #  raise ChessError.new("#{moves(direction) + attack_moves(attack_dirs)}")
   end
 
   def moves(direction)
     possible_moves = []
     direction.each do |dx, dy|
       new_pos = [pos[0] + dx, pos[1]+dy]
-      possible_moves << new_pos if on_board?(new_pos) && board[pos].empty?
+      possible_moves << new_pos if on_board?(new_pos) && board[new_pos].empty?
     end
     possible_moves
   end

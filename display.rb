@@ -2,6 +2,7 @@ require 'colorize'
 
 class Display
   include Cursorable
+  attr_reader :cursor_pos
 
   def initialize(board)
     @board = board
