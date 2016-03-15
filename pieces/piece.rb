@@ -1,3 +1,5 @@
+require 'byebug'
+
 class Piece
   attr_reader :board, :color, :pos
 
@@ -17,6 +19,18 @@ class Piece
     pos.all? {|el| el.between?(0,7)} #&& board[pos].empty?
   end
 
+  def valid_moves
+    if board.in_check?(color)
+      move_dirs.reject do |move|
+        dup_board = board.dup
+        dup_board.move!(@pos,move)
+        dup_board.in_check?(@color)
+      end
+    else
+      move_dirs
+    end
+  end
+
   def empty?
     false
   end
@@ -29,8 +43,14 @@ end
 
 class EmptyPiece
   attr_reader :pos
-  def initialize(board, pos)
+  def initialize(board, pos, color)
+    @board = board
     @pos = pos
+  end
+
+  def pos=(end_pos)
+    @pos = end_pos
+    @board[end_pos] = self
   end
 
   def color

@@ -14,20 +14,25 @@ class Game
     @board.setup
     @display = Display.new(@board)
     @first_move = nil
-    @second_move = nil
+    @current_player = :white
+    @next_player = :black
+  end
+
+  def swap_players!
+    @current_player, @next_player = @next_player, @current_player
   end
 
   def play
-    5.times {play_turn}   #REMOVE
+    until board.checkmate?
+      play_turn
+      swap_players!
+    end
   end
 
   def get_move
     result = nil
     until result
       @display.render
-      # if @display.cursor_pos == [3,0]
-      #   debugger
-      # end
       p @display.cursor_pos
       unless @first_move.nil?
         p "Move #{board[@first_move].class} from: #{@first_move}"
@@ -37,11 +42,19 @@ class Game
     result
   end
 
+
   def play_turn
+    if @board.in_check?(@current_player)  #REVISE
+      puts "Check"
+      sleep 1
+    end
     @first_move = nil   #reset first move
     @first_move = get_move
-    if @board[@first_move].empty?
+    first_piece = @board[@first_move]
+    if first_piece.empty?
       raise ChessError.new("There is no piece at this position")
+    elsif first_piece.color == @next_player
+      raise ChessError.new("Not your piece. Your color is #{@current_player}")
     end
     @second_move = get_move
     @board.move(@first_move,@second_move)
