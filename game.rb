@@ -23,10 +23,11 @@ class Game
   end
 
   def play
-    until board.checkmate?
+    until board.checkmate?(@current_player)
       play_turn
       swap_players!
     end
+    puts "Checkmate. #{@next_player} wins!"
   end
 
   def get_move

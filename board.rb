@@ -15,10 +15,6 @@ class Board
     @grid.each(&blk)
   end
 
-  def checkmate?
-    false
-  end
-
   def [](pos)
     x, y = pos
     @grid[x][y]
@@ -77,6 +73,18 @@ class Board
     end
   end
 
+  def checkmate?(color)
+    return false unless in_check?(color)
+    
+    current_pieces = @grid.flatten.select do |piece|
+      !piece.empty? && piece.color == color
+    end
+
+    current_pieces.all? do |piece|
+      piece.valid_moves.empty?
+    end
+  end
+
   def find_king(color)
     self.each do |row|
       row.each do |piece|
@@ -92,7 +100,6 @@ class Board
     new_board = Board.new
     pieces = @grid.flatten
     pieces.each do |piece|
-
       dup_piece = piece.class.new(new_board,piece.pos,piece.color)
       new_board[piece.pos] = dup_piece
     end
@@ -104,7 +111,5 @@ class Board
     piece.pos = end_pos
     self[start_pos] = EmptyPiece.new(self,start_pos,nil)
   end
-
-
 
 end

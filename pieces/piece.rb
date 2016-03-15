@@ -67,6 +67,10 @@ class EmptyPiece
     "   "
   end
 
+  def inspect
+    "empty"
+  end
+
   def empty?
     true
   end
