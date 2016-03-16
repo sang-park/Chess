@@ -1,8 +1,5 @@
-require 'byebug'
-
 class Piece
   attr_reader :board, :color, :pos
-
 
   def initialize(board, pos, color)
     @board = board
@@ -16,29 +13,28 @@ class Piece
   end
 
   def on_board?(pos)
-    pos.all? {|el| el.between?(0,7)} #&& board[pos].empty?
+    pos.all? {|el| el.between?(0,7)}
   end
 
   def valid_moves
     if board.in_check?(color)
-      move_dirs.reject do |move|
-        dup_board = board.dup
-        dup_board.move!(@pos,move)
-        dup_board.in_check?(@color)
+      move_dirs.reject do |end_move|
+        move_to_check?(end_move)
       end
     else
       move_dirs
     end
   end
 
+  def move_to_check?(end_move)
+    dup_board = board.dup
+    dup_board.move!(pos,end_move)
+    dup_board.in_check?(color)
+  end
+
   def empty?
     false
   end
-
-  def inspect
-    "#{self.class}, #{pos}, #{color}"
-  end
-
 end
 
 class EmptyPiece
@@ -58,21 +54,18 @@ class EmptyPiece
   end
 
   def valid_moves
+    #duck typing
   end
 
   def valid_moves?(pos)
+    #duck typing
   end
 
   def to_s
     "   "
   end
 
-  def inspect
-    "empty"
-  end
-
   def empty?
     true
   end
-
 end

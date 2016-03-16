@@ -1,9 +1,9 @@
 class Pawn < Piece
   attr_reader :board, :pos, :color
-  WHITE = [ 1, 0]
-  BLACK = [-1, 0]
-  WHITE_ATTACK = [[ 1, -1], [ 1, 1]]
-  BLACK_ATTACK = [[-1, -1], [-1, 1]]
+  BLACK = [ 1, 0]
+  WHITE = [-1, 0]
+  BLACK_ATTACK = [[ 1, -1], [ 1, 1]]
+  WHITE_ATTACK = [[-1, -1], [-1, 1]]
 
 
   def initialize(board,pos,color)
@@ -17,13 +17,13 @@ class Pawn < Piece
     if color == :white
       direction << WHITE
       attack_dirs = WHITE_ATTACK
-      if pos[0] == 1 #consider first move if at starting row
+      if pos[0] == 6 #consider first move if at starting row
         direction << WHITE.map{|el| el*2}
       end
     else
       direction << BLACK
       attack_dirs = BLACK_ATTACK
-      if pos[0] == 6
+      if pos[0] == 1
         direction << BLACK.map{|el| el*2}
       end
     end
@@ -45,8 +45,9 @@ class Pawn < Piece
     possible_moves = []
     direction.each do |dx, dy|
       new_pos = [pos[0] + dx, pos[1]+dy]
+      next unless on_board?(new_pos)
       new_piece = board[new_pos]
-      if on_board?(new_pos) && !new_piece.empty? && new_piece.color != color
+      if !new_piece.empty? && new_piece.color != color
         possible_moves << new_pos
       end
     end
